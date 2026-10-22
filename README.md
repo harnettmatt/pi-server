@@ -18,7 +18,7 @@ notes on how the apps that run on it get deployed.
 | themesong client | [themesong-client](https://github.com/harnettmatt/themesong-client) | GitHub Actions → SSH (`PI_HOST`/`PI_USERNAME`/`PI_KEY` secrets) |
 | themesong API | [themesong-api](https://github.com/harnettmatt/themesong-api) | GitHub Actions → SSH |
 | this repo | pi-server | GitHub Actions → SSH, then `make rebuild` in `~/pi-server` |
-| Wheel of Galby | galbraith-route-generator (private) | Self-hosted GitHub Actions runner on the Pi |
+| Wheel of Galby | [wheel-of-galby](https://github.com/harnettmatt/wheel-of-galby) (private) · https://wheelofgalby.com | Self-hosted GitHub Actions runner on the Pi |
 | Media stack (Jellyfin, Dispatcharr, *arr) | pi-media-stack (private) | By hand; config kept in sync with the Pi |
 
 The SSH deploys `cd` into a folder named after the repo, so each repo lives at `~/<repo name>`.
@@ -28,13 +28,13 @@ The SSH deploys `cd` into a folder named after the repo, so each repo lives at `
 The Pi is only reachable from the home network for that app, so its deploys run on a GitHub Actions
 runner installed on the Pi itself, as a service that starts on boot:
 
-- installed in `~/actions-runner`, registered to galbraith-route-generator as `galby-pi`
-- service: `actions.runner.harnettmatt-galbraith-route-generator.galby-pi`
+- installed in `~/actions-runner`, registered to wheel-of-galby (formerly galbraith-route-generator) as `galby-pi`
+- service: `actions.runner.harnettmatt-galbraith-route-generator.galby-pi` (named before the rename)
   (`sudo ~/actions-runner/svc.sh status|stop|start`)
 - to (re)install: download the arm64 release from https://github.com/actions/runner/releases, then
 
-      ./config.sh --unattended --replace --url https://github.com/harnettmatt/galbraith-route-generator \
-        --token <token from: gh api -X POST repos/harnettmatt/galbraith-route-generator/actions/runners/registration-token --jq .token> \
+      ./config.sh --unattended --replace --url https://github.com/harnettmatt/wheel-of-galby \
+        --token <token from: gh api -X POST repos/harnettmatt/wheel-of-galby/actions/runners/registration-token --jq .token> \
         --name galby-pi --labels galby-pi
       sudo ./svc.sh install mattpi && sudo ./svc.sh start
 
